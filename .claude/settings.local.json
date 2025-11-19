@@ -6,10 +6,13 @@
       "Bash(npx shadcn@latest add:*)",
       "Bash(npm run build:*)",
       "Bash(npm run lint)",
-      "Bash(npm run format:*)"
+      "Bash(npm run format:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
   },
-  "enabledMcpjsonServers": ["shadcn"]
+  "enabledMcpjsonServers": [
+    "shadcn"
+  ]
 }
