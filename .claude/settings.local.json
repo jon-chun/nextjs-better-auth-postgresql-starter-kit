@@ -13,7 +13,8 @@
       "Bash(npm run db:start:*)",
       "Bash(npm run db:migrate:*)",
       "Bash(npx prisma migrate:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(npm run db:seed:*)"
     ],
     "deny": [],
     "ask": []
