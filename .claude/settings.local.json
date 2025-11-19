@@ -7,7 +7,13 @@
       "Bash(npm run build:*)",
       "Bash(npm run lint)",
       "Bash(npm run format:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npx prisma init)",
+      "Bash(openssl rand:*)",
+      "Bash(npm run db:start:*)",
+      "Bash(npm run db:migrate:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

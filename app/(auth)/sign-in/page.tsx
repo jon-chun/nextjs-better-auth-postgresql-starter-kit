@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,10 +17,15 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ROUTES } from "@/lib/constants";
+import { signInSchema } from "@/lib/validations";
+import { authClient } from "@/lib/auth-client";
 import { Chrome } from "lucide-react";
 
 export default function SignInPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || ROUTES.DASHBOARD;
+
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -32,16 +37,18 @@ export default function SignInPage() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    // Email validation
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = "Password is required";
+    // Validate with Zod schema
+    try {
+      signInSchema.parse({
+        email: formData.email,
+        password: formData.password,
+      });
+    } catch (error: any) {
+      if (error.errors) {
+        error.errors.forEach((err: any) => {
+          newErrors[err.path[0]] = err.message;
+        });
+      }
     }
 
     setErrors(newErrors);
@@ -54,22 +61,38 @@ export default function SignInPage() {
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setErrors({});
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const result = await authClient.signIn.email({
+        email: formData.email,
+        password: formData.password,
+        rememberMe: formData.rememberMe,
+      });
+
+      if (result.error) {
+        setErrors({
+          general: result.error.message || "Invalid email or password",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Success - redirect to dashboard or original destination
+      router.push(redirectUrl);
+    } catch (error: any) {
+      setErrors({
+        general: error.message || "An unexpected error occurred",
+      });
       setIsLoading(false);
-      // Mock success - redirect to dashboard
-      router.push(ROUTES.DASHBOARD);
-    }, 1500);
+    }
   };
 
   const handleGoogleSignIn = () => {
-    // Mock Google sign in
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      router.push(ROUTES.DASHBOARD);
-    }, 1000);
+    // OAuth sign-in will be implemented in later phase
+    setErrors({
+      general: "Google sign-in will be available soon",
+    });
   };
 
   return (
@@ -81,6 +104,11 @@ export default function SignInPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {errors.general && (
+          <div className="mb-4 rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive">
+            {errors.general}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email */}
           <div className="space-y-2">

@@ -38,3 +38,5 @@ next-env.d.ts
 
 # python virtual env
 .venv/
+
+/lib/generated/prisma

@@ -18,13 +18,17 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { PasswordStrengthIndicator } from "@/components/shared/password-strength-indicator";
 import { ROUTES } from "@/lib/constants";
-import { Chrome } from "lucide-react";
+import { signUpSchema } from "@/lib/validations";
+import { authClient } from "@/lib/auth-client";
+import { Chrome, CheckCircle2 } from "lucide-react";
 
 export default function SignUpPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
+    name: "",
     password: "",
     confirmPassword: "",
     acceptTerms: false,
@@ -34,18 +38,19 @@ export default function SignUpPage() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    // Email validation
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
+    // Validate with Zod schema
+    try {
+      signUpSchema.parse({
+        email: formData.email,
+        name: formData.name || undefined,
+        password: formData.password,
+      });
+    } catch (error: any) {
+      if (error.errors) {
+        error.errors.forEach((err: any) => {
+          newErrors[err.path[0]] = err.message;
+        });
+      }
     }
 
     // Confirm password validation
@@ -70,23 +75,81 @@ export default function SignUpPage() {
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setErrors({});
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const result = await authClient.signUp.email({
+        email: formData.email,
+        password: formData.password,
+        name: formData.name || "",
+      });
+
+      if (result.error) {
+        setErrors({
+          general: result.error.message || "Failed to create account",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Show success message - user needs to verify email
+      setEmailSent(true);
       setIsLoading(false);
-      // Mock success - redirect to dashboard
-      router.push(ROUTES.DASHBOARD);
-    }, 1500);
+    } catch (error: any) {
+      setErrors({
+        general: error.message || "An unexpected error occurred",
+      });
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleSignUp = () => {
-    // Mock Google sign up
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      router.push(ROUTES.DASHBOARD);
-    }, 1000);
+    // OAuth sign-up will be implemented in later phase
+    setErrors({
+      general: "Google sign-up will be available soon",
+    });
   };
+
+  // Show success message if email was sent
+  if (emailSent) {
+    return (
+      <Card>
+        <CardHeader className="space-y-1 text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <CheckCircle2 className="h-6 w-6 text-green-600" />
+          </div>
+          <CardTitle className="text-2xl font-bold">Check your email</CardTitle>
+          <CardDescription>
+            We&apos;ve sent a verification link to <strong>{formData.email}</strong>
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="rounded-lg border bg-muted/50 p-4 text-sm">
+            <p className="mb-2 font-medium">Next steps:</p>
+            <ol className="list-inside list-decimal space-y-1 text-muted-foreground">
+              <li>Check your email inbox</li>
+              <li>Click the verification link in the email</li>
+              <li>Sign in to start creating plushies!</li>
+            </ol>
+          </div>
+          <p className="text-center text-sm text-muted-foreground">
+            Didn&apos;t receive the email? Check your spam folder or{" "}
+            <button
+              onClick={() => setEmailSent(false)}
+              className="underline hover:text-primary"
+            >
+              try again
+            </button>
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Button asChild className="w-full">
+            <Link href={ROUTES.SIGN_IN}>Go to Sign In</Link>
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -97,7 +160,32 @@ export default function SignUpPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {errors.general && (
+          <div className="mb-4 rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive">
+            {errors.general}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name */}
+          <div className="space-y-2">
+            <Label htmlFor="name">Name (optional)</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Your name"
+              value={formData.name}
+              onChange={(e) => {
+                setFormData({ ...formData, name: e.target.value });
+                setErrors({ ...errors, name: "" });
+              }}
+              className={errors.name ? "border-destructive" : ""}
+              disabled={isLoading}
+            />
+            {errors.name && (
+              <p className="text-sm text-destructive">{errors.name}</p>
+            )}
+          </div>
+
           {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
