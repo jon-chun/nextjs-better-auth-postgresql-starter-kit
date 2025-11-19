@@ -18,7 +18,11 @@
       "Bash(npm test:*)",
       "Bash(npm run test:coverage:*)",
       "Bash(npm run test:unit:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(chmod:*)",
+      "Bash(scripts/download-example-images.sh)",
+      "Bash(npm run generate:plushies:dry-run:*)",
+      "Bash(scripts/create-placeholder-plushies.sh:*)"
     ],
     "deny": [],
     "ask": []

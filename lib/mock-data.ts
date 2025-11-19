@@ -23,83 +23,86 @@ export interface GalleryItem {
   prompt?: string;
 }
 
+// Mock gallery items using local example images
+// These would normally be user-generated images from the dashboard
+// For demo purposes, we're using the same example images from the homepage
 export const mockGalleryItems: GalleryItem[] = [
   {
     id: "img_1",
-    originalImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/f0abfc/a855f7?text=Cute+Plushie+🧸",
+    originalImage: "/images/examples/people_1_original.jpg",
+    generatedImage: "/images/examples/people_1_plushie.png",
     style: "cute-fluffy",
     createdAt: new Date("2024-11-15T10:30:00"),
     prompt: "Person in casual outfit",
   },
   {
     id: "img_2",
-    originalImage: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/fbbf24/f59e0b?text=Realistic+Dog+🐻",
+    originalImage: "/images/examples/pets_1_original.jpg",
+    generatedImage: "/images/examples/pets_1_plushie.png",
     style: "realistic-plush",
     createdAt: new Date("2024-11-14T15:20:00"),
     prompt: "Golden retriever dog",
   },
   {
     id: "img_3",
-    originalImage: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/93c5fd/3b82f6?text=Cartoon+Style+🎨",
+    originalImage: "/images/examples/kids_1_original.jpg",
+    generatedImage: "/images/examples/kids_1_plushie.png",
     style: "cartoon-style",
     createdAt: new Date("2024-11-14T09:15:00"),
     prompt: "Young child smiling",
   },
   {
     id: "img_4",
-    originalImage: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/d1d5db/6b7280?text=Minimalist+Cat+✨",
+    originalImage: "/images/examples/pets_2_original.jpg",
+    generatedImage: "/images/examples/pets_2_plushie.png",
     style: "minimalist",
     createdAt: new Date("2024-11-13T14:45:00"),
     prompt: "Cat portrait",
   },
   {
     id: "img_5",
-    originalImage: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/fbcfe8/ec4899?text=Family+Plushies+🧸",
+    originalImage: "/images/examples/groups_1_original.jpg",
+    generatedImage: "/images/examples/groups_1_plushie.png",
     style: "cute-fluffy",
     createdAt: new Date("2024-11-12T11:00:00"),
     prompt: "Family photo",
   },
   {
     id: "img_6",
-    originalImage: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/fde047/facc15?text=Best+Friends+🐻",
+    originalImage: "/images/examples/groups_2_original.jpg",
+    generatedImage: "/images/examples/groups_2_plushie.png",
     style: "realistic-plush",
     createdAt: new Date("2024-11-11T16:30:00"),
     prompt: "Best friends",
   },
   {
     id: "img_7",
-    originalImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/a5f3fc/06b6d4?text=Graduation+🎨",
+    originalImage: "/images/examples/people_2_original.jpg",
+    generatedImage: "/images/examples/people_2_plushie.png",
     style: "cartoon-style",
     createdAt: new Date("2024-11-10T13:20:00"),
-    prompt: "Graduation photo",
+    prompt: "Casual portrait",
   },
   {
     id: "img_8",
-    originalImage: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/fecaca/f87171?text=Baby+Plushie+🧸",
+    originalImage: "/images/examples/kids_2_original.jpg",
+    generatedImage: "/images/examples/kids_2_plushie.png",
     style: "cute-fluffy",
     createdAt: new Date("2024-11-09T10:10:00"),
     prompt: "Baby portrait",
   },
   {
     id: "img_9",
-    originalImage: "https://images.unsplash.com/photo-1536766768598-e09213fdcec5?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/e5e7eb/9ca3af?text=Couple+Minimal+✨",
+    originalImage: "/images/examples/people_3_original.jpg",
+    generatedImage: "/images/examples/people_3_plushie.png",
     style: "minimalist",
     createdAt: new Date("2024-11-08T15:45:00"),
-    prompt: "Couple selfie",
+    prompt: "Professional headshot",
   },
   {
     id: "img_10",
-    originalImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=600&fit=crop",
-    generatedImage: "https://placehold.co/600x600/fed7aa/fb923c?text=Wedding+Plush+🐻",
+    originalImage: "/images/examples/groups_3_original.jpg",
+    generatedImage: "/images/examples/groups_3_plushie.png",
     style: "realistic-plush",
     createdAt: new Date("2024-11-07T12:25:00"),
     prompt: "Wedding photo",
@@ -115,60 +118,68 @@ export interface BeforeAfterPair {
   title: string;
 }
 
+// Real plushie transformations using local images
+// Original photos downloaded from Unsplash (free, high-quality)
+// Plushie versions generated using OpenAI DALL-E 3 (see docs/GENERATE_PLUSHIE_EXAMPLES.md)
+//
+// To generate plushie versions:
+//   npm run generate:plushies
+//
+// For now, using Unsplash placeholders until plushies are generated
 export const mockBeforeAfterPairs: BeforeAfterPair[] = [
   {
     id: "example_1",
-    before: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    after: "https://placehold.co/400x400/f0abfc/a855f7?text=Plushie+Portrait+🧸",
+    before: "/images/examples/people_1_original.jpg",
+    after: "/images/examples/people_1_plushie.png",
     category: "people",
     title: "Professional Portrait",
   },
   {
     id: "example_2",
-    before: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=400&fit=crop",
-    after: "https://placehold.co/400x400/fbbf24/f59e0b?text=Plushie+Dog+🐻",
+    before: "/images/examples/pets_1_original.jpg",
+    after: "/images/examples/pets_1_plushie.png",
     category: "pets",
     title: "Adorable Golden Retriever",
   },
   {
     id: "example_3",
-    before: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=400&fit=crop",
-    after: "https://placehold.co/400x400/93c5fd/3b82f6?text=Plushie+Kid+🎨",
+    before: "/images/examples/kids_1_original.jpg",
+    after: "/images/examples/kids_1_plushie.png",
     category: "kids",
     title: "Smiling Child",
   },
   {
     id: "example_4",
-    before: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400&h=400&fit=crop",
-    after: "https://placehold.co/400x400/fbcfe8/ec4899?text=Group+Plushies+🧸",
+    before: "/images/examples/groups_1_original.jpg",
+    after: "/images/examples/groups_1_plushie.png",
     category: "groups",
     title: "Best Friends",
   },
   {
     id: "example_5",
-    before: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-    after: "https://placehold.co/400x400/d8b4fe/a78bfa?text=Casual+Plushie+✨",
+    before: "/images/examples/people_2_original.jpg",
+    after: "/images/examples/people_2_plushie.png",
     category: "people",
     title: "Casual Portrait",
   },
   {
     id: "example_6",
-    before: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&h=400&fit=crop",
-    after: "https://placehold.co/400x400/d1d5db/6b7280?text=Cat+Plushie+🐱",
+    before: "/images/examples/pets_2_original.jpg",
+    after: "/images/examples/pets_2_plushie.png",
     category: "pets",
     title: "Fluffy Cat",
   },
   {
     id: "example_7",
-    before: "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=400&h=400&fit=crop",
-    after: "https://placehold.co/400x400/fecaca/f87171?text=Baby+Plushie+👶",
+    before: "/images/examples/kids_2_original.jpg",
+    after: "/images/examples/kids_2_plushie.png",
     category: "kids",
     title: "Baby Portrait",
   },
   {
     id: "example_8",
-    before: "https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=400&fit=crop",
-    after: "https://placehold.co/400x400/fed7aa/fb923c?text=Family+Plush+👨‍👩‍👧‍👦",
+    before: "/images/examples/groups_2_original.jpg",
+    after: "/images/examples/groups_2_plushie.png",
     category: "groups",
     title: "Family Photo",
   },

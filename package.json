@@ -20,7 +20,10 @@
     "db:migrate": "npx prisma migrate dev",
     "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx prisma/seed.ts",
+    "generate:plushies": "tsx lib/generate-example-plushies.ts",
+    "generate:plushies:dry-run": "tsx lib/generate-example-plushies.ts --dry-run",
+    "generate:plushies:text-only": "tsx lib/generate-example-plushies.ts --text-only"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.934.0",

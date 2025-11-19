@@ -25,13 +25,20 @@ This directory contains comprehensive documentation for the PlushifyMe applicati
    - Common error patterns and systematic debugging approaches
    - **Use this for:** Any configuration issues, external service setup, debugging
 
-2. **[CONFIGURATION_VERIFICATION.md](./CONFIGURATION_VERIFICATION.md)**
+2. **[GENERATE_PLUSHIE_EXAMPLES.md](./GENERATE_PLUSHIE_EXAMPLES.md)** ⭐ **NEW**
+   - Complete guide to generating demo plushie images with DALL-E 3
+   - High-quality prompts for realistic transformations
+   - Step-by-step commands with cost estimates (~$1.28 total)
+   - Troubleshooting and testing procedures
+   - **Use this for:** Creating homepage demo images
+
+3. **[CONFIGURATION_VERIFICATION.md](./CONFIGURATION_VERIFICATION.md)**
    - Step-by-step verification of external services
    - Test scripts for OpenAI and AWS S3
    - CORS configuration instructions
    - Troubleshooting for common errors
 
-3. **[CONFIG_TEST_RESULTS.md](./CONFIG_TEST_RESULTS.md)**
+4. **[CONFIG_TEST_RESULTS.md](./CONFIG_TEST_RESULTS.md)**
    - Complete configuration status report
    - Test results summary (69/69 unit tests passing)
    - Service-by-service configuration review
