@@ -1,0 +1,18 @@
+# robots.txt for PlushifyMe
+# Allow all crawlers to access all pages
+
+User-agent: *
+Allow: /
+
+# Disallow crawling of authentication pages
+Disallow: /sign-in
+Disallow: /sign-up
+
+# Disallow crawling of dashboard (requires authentication)
+Disallow: /dashboard
+Disallow: /gallery
+Disallow: /settings
+Disallow: /credits
+
+# Sitemap location
+Sitemap: https://plushifyme.com/sitemap.xml

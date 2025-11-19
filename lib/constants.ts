@@ -42,34 +42,39 @@ export const PRICING_PLANS = {
 } as const;
 
 // Plushie Styles
-export const PLUSHIE_STYLES = {
-  CUTE_FLUFFY: {
+export const PLUSHIE_STYLES = [
+  {
     id: "cute-fluffy",
     name: "Cute & Fluffy",
     description: "Soft, cuddly plushie with a kawaii aesthetic",
+    emoji: "🧸",
   },
-  REALISTIC: {
+  {
     id: "realistic-plush",
     name: "Realistic Plush",
     description: "Detailed and lifelike plushie representation",
+    emoji: "🐻",
   },
-  CARTOON: {
+  {
     id: "cartoon-style",
     name: "Cartoon Style",
     description: "Fun, animated cartoon-like plushie",
+    emoji: "🎨",
   },
-  MINIMALIST: {
+  {
     id: "minimalist",
     name: "Minimalist",
     description: "Clean, simple design with minimal details",
+    emoji: "✨",
   },
-} as const;
+] as const;
 
 // Image Upload Settings
 export const IMAGE_UPLOAD = {
-  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB in bytes
-  ACCEPTED_FORMATS: ["image/jpeg", "image/png", "image/webp"],
-  ACCEPTED_EXTENSIONS: [".jpg", ".jpeg", ".png", ".webp"],
+  maxSizeMB: 10,
+  maxFileSize: 10 * 1024 * 1024, // 10MB in bytes
+  acceptedFormats: ["image/jpeg", "image/png", "image/webp"],
+  acceptedExtensions: [".jpg", ".jpeg", ".png", ".webp"],
 } as const;
 
 // Credits

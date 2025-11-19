@@ -21,6 +21,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ## Initial Requirements
 
 ### Primary Goals
+
 1. Create a beautiful, SEO-optimized landing page showcasing before/after transformations
 2. Implement user authentication UI (sign in/sign up)
 3. Build a dashboard where users can generate plushie images
@@ -28,6 +29,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 5. Provide public-facing documentation and legal pages
 
 ### Key Constraints
+
 - **UI-Only Focus:** No backend logic implementation at this stage
 - **Mock Data:** All interactions use placeholder/mock data
 - **User Experience First:** Focus on getting the UX right before implementing functionality
@@ -39,6 +41,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-1: Landing Page
 
 #### FR-1.1: Hero Section
+
 - **Description:** Display compelling hero section with value proposition
 - **Requirements:**
   - Headline: "Transform Your Photos into Adorable Plushies"
@@ -49,6 +52,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Mobile-responsive layout
 
 #### FR-1.2: Before/After Gallery
+
 - **Description:** Showcase 6-8 example transformations
 - **Requirements:**
   - Interactive before/after slider for each image pair
@@ -58,6 +62,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - High-quality example images
 
 #### FR-1.3: Features Section
+
 - **Description:** Highlight key features of the service
 - **Requirements:**
   - Display 4-6 key features with icons, titles, and descriptions
@@ -66,6 +71,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Responsive design
 
 #### FR-1.4: How It Works
+
 - **Description:** Explain the 3-step process
 - **Requirements:**
   - Step 1: Upload Your Photo
@@ -75,6 +81,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Clear, concise descriptions
 
 #### FR-1.5: Pricing Preview
+
 - **Description:** Brief overview of pricing tiers
 - **Requirements:**
   - Summary of available plans
@@ -82,6 +89,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Visually distinct from full pricing page
 
 #### FR-1.6: SEO Optimization
+
 - **Description:** Optimize landing page for search engines
 - **Requirements:**
   - Unique meta title and description
@@ -94,6 +102,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-2: Navigation
 
 #### FR-2.1: Header Navigation
+
 - **Description:** Global navigation bar
 - **Requirements:**
   - PlushifyMe logo/branding
@@ -104,6 +113,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Smooth animations
 
 #### FR-2.2: Footer
+
 - **Description:** Site-wide footer
 - **Requirements:**
   - Quick links: Pricing, Docs, FAQ, Terms
@@ -115,6 +125,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-3: Pricing Page
 
 #### FR-3.1: Pricing Tiers
+
 - **Description:** Display three pricing tiers
 - **Requirements:**
   - **Basic Plan:** 30 credits for $9.95
@@ -133,6 +144,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Responsive 3-column grid (1 column on mobile)
 
 #### FR-3.2: Features Comparison Table
+
 - **Description:** Detailed feature comparison
 - **Requirements:**
   - Comparison table showing all features across tiers
@@ -141,6 +153,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Clear visual hierarchy
 
 #### FR-3.3: Pricing FAQ
+
 - **Description:** Common pricing questions
 - **Requirements:**
   - Accordion component
@@ -150,6 +163,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-4: Authentication Pages
 
 #### FR-4.1: Sign Up Page
+
 - **Description:** User registration interface
 - **Requirements:**
   - Email input field
@@ -162,6 +176,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Success state (UI only)
 
 #### FR-4.2: Sign In Page
+
 - **Description:** User login interface
 - **Requirements:**
   - Email input field
@@ -176,6 +191,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-5: Dashboard
 
 #### FR-5.1: Dashboard Layout
+
 - **Description:** Authenticated user dashboard structure
 - **Requirements:**
   - Sidebar navigation (desktop)
@@ -185,6 +201,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Smooth transitions between sections
 
 #### FR-5.2: Sidebar Navigation
+
 - **Description:** Main navigation within dashboard
 - **Requirements:**
   - Navigation items:
@@ -197,6 +214,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Icons with labels
 
 #### FR-5.3: User Menu
+
 - **Description:** User account dropdown
 - **Requirements:**
   - User avatar (with initials or image)
@@ -211,6 +229,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-6: Image Generation UI
 
 #### FR-6.1: Upload Interface
+
 - **Description:** Image upload component
 - **Requirements:**
   - Drag & drop zone
@@ -223,6 +242,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Error states for invalid files
 
 #### FR-6.2: Style Customization
+
 - **Description:** Plushie style selector
 - **Requirements:**
   - Style options:
@@ -236,6 +256,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Selected state highlighting
 
 #### FR-6.3: Preview & Cropping
+
 - **Description:** Image cropping tool
 - **Requirements:**
   - Interactive crop area with draggable handles
@@ -247,6 +268,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Grid overlay for alignment
 
 #### FR-6.4: Generation Controls
+
 - **Description:** Image generation controls
 - **Requirements:**
   - "Generate Plushie" primary button
@@ -258,6 +280,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Disabled states when required fields missing
 
 #### FR-6.5: Generation Status
+
 - **Description:** Progress and status display
 - **Requirements:**
   - Loading state with animated spinner
@@ -270,6 +293,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-7: Gallery
 
 #### FR-7.1: Gallery Grid
+
 - **Description:** Display user's generated images
 - **Requirements:**
   - Responsive grid: 4 columns (desktop), 3 (tablet), 2 (mobile)
@@ -280,6 +304,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Loading skeleton states
 
 #### FR-7.2: Gallery Filters
+
 - **Description:** Filter and sort options
 - **Requirements:**
   - Filter by date: All, Today, This Week, This Month
@@ -290,6 +315,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Active filter indicators
 
 #### FR-7.3: Gallery Item Card
+
 - **Description:** Individual gallery item
 - **Requirements:**
   - Thumbnail image
@@ -302,6 +328,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Responsive sizing
 
 #### FR-7.4: Image Modal
+
 - **Description:** Full-size image viewer
 - **Requirements:**
   - Full-size image display
@@ -316,6 +343,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-8: Documentation
 
 #### FR-8.1: Documentation Layout
+
 - **Description:** Documentation site structure
 - **Requirements:**
   - Left sidebar navigation for docs sections
@@ -326,6 +354,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Search functionality (UI only)
 
 #### FR-8.2: Getting Started Guide
+
 - **Description:** Onboarding documentation
 - **Requirements:**
   - Welcome message
@@ -336,6 +365,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
   - Clear step-by-step instructions
 
 #### FR-8.3: How to Use Guide
+
 - **Description:** Detailed usage instructions
 - **Requirements:**
   - Uploading images section
@@ -349,6 +379,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-9: FAQ Page
 
 #### FR-9.1: FAQ Accordion
+
 - **Description:** Frequently asked questions
 - **Requirements:**
   - Categorized accordion sections:
@@ -375,6 +406,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### FR-10: Legal Pages
 
 #### FR-10.1: Terms of Service
+
 - **Description:** Legal terms and conditions
 - **Requirements:**
   - Standard ToS sections:
@@ -401,16 +433,19 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### NFR-1: Performance
 
 #### NFR-1.1: Page Load Time
+
 - Landing page should load in under 3 seconds on 3G connection
 - Dashboard should load in under 2 seconds on broadband
 - Images should use lazy loading and Next.js Image optimization
 
 #### NFR-1.2: Interactivity
+
 - UI interactions should respond within 100ms
 - Animations should run at 60fps
 - No janky scrolling or layout shifts
 
 #### NFR-1.3: Bundle Size
+
 - Initial JavaScript bundle should be under 300KB (gzipped)
 - Code splitting for route-based chunks
 - Tree shaking for unused code
@@ -418,11 +453,13 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### NFR-2: Usability
 
 #### NFR-2.1: Responsiveness
+
 - Support screen sizes from 320px to 2560px
 - Breakpoints at 640px (tablet) and 1024px (desktop)
 - Touch-friendly controls on mobile (minimum 44x44px tap targets)
 
 #### NFR-2.2: Accessibility
+
 - WCAG 2.1 AA compliance
 - Semantic HTML throughout
 - ARIA labels for interactive elements
@@ -433,6 +470,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - Alt text for all images
 
 #### NFR-2.3: Browser Support
+
 - Chrome (last 2 versions)
 - Firefox (last 2 versions)
 - Safari (last 2 versions)
@@ -443,6 +481,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### NFR-3: Design & Branding
 
 #### NFR-3.1: Visual Design
+
 - Consistent color palette (primary, secondary, accent colors)
 - Typography hierarchy (H1-H6, body, small)
 - Cohesive spacing scale
@@ -451,12 +490,14 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - "Plushie" vibe (playful but professional)
 
 #### NFR-3.2: Components
+
 - Use shadcn/ui component library
 - Consistent button variants (primary, secondary, outline, ghost)
 - Reusable component patterns
 - Storybook-ready components (optional)
 
 #### NFR-3.3: Animations
+
 - Subtle, purposeful animations
 - Smooth transitions (200-300ms typical)
 - Loading states for all async operations
@@ -466,12 +507,14 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### NFR-4: Code Quality
 
 #### NFR-4.1: TypeScript
+
 - Strict TypeScript configuration
 - Type safety throughout
 - No usage of `any` type (except when absolutely necessary)
 - Proper interfaces and types for all components
 
 #### NFR-4.2: Code Organization
+
 - Clear folder structure
 - Component co-location
 - Separation of concerns
@@ -479,6 +522,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - Meaningful naming conventions
 
 #### NFR-4.3: Documentation
+
 - JSDoc comments for complex functions
 - README for setup instructions
 - Component documentation
@@ -487,6 +531,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### NFR-5: SEO & Marketing
 
 #### NFR-5.1: SEO Optimization
+
 - Unique meta titles (50-60 characters)
 - Unique meta descriptions (150-160 characters)
 - Open Graph tags for social sharing
@@ -498,6 +543,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - Robots.txt
 
 #### NFR-5.2: Analytics Ready
+
 - Structure for Google Analytics integration
 - Event tracking placeholders
 - Conversion tracking structure
@@ -505,12 +551,14 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### NFR-6: Security (UI Layer)
 
 #### NFR-6.1: Input Validation
+
 - Client-side validation for all forms
 - XSS prevention through React's automatic escaping
 - No eval() or dangerous innerHTML usage
 - Sanitized user inputs
 
 #### NFR-6.2: Authentication UI
+
 - Password strength indicators
 - Secure password input fields (type="password")
 - HTTPS enforcement (production)
@@ -518,11 +566,13 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ### NFR-7: Maintainability
 
 #### NFR-7.1: Scalability
+
 - Component architecture that supports future features
 - Modular design for easy additions
 - Configuration-driven content where possible
 
 #### NFR-7.2: Development Experience
+
 - Fast development server startup
 - Hot module replacement (HMR)
 - ESLint and Prettier integration
@@ -534,6 +584,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 ## Acceptance Criteria
 
 ### AC-1: Landing Page
+
 - [ ] Landing page displays hero section with headline and CTAs
 - [ ] Before/after gallery shows 6-8 examples with interactive sliders
 - [ ] Features section displays at least 4 key features
@@ -544,6 +595,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] SEO meta tags are present and unique
 
 ### AC-2: Pricing Page
+
 - [ ] Three pricing tiers are displayed (Basic, Pro, Elite)
 - [ ] Pricing details are accurate ($9.95, $19.95, $29.95)
 - [ ] Credit counts are correct (30, 100, 200)
@@ -554,6 +606,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Popular badge on Pro plan is visible
 
 ### AC-3: Authentication
+
 - [ ] Sign Up page has all required fields
 - [ ] Password strength indicator updates as user types
 - [ ] Form validation shows error states appropriately
@@ -564,6 +617,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Error messages are clear and helpful
 
 ### AC-4: Dashboard
+
 - [ ] Dashboard layout displays with sidebar and top bar
 - [ ] Navigation items are visible and styled
 - [ ] Active state highlights current page
@@ -573,6 +627,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Credits display shows in user menu
 
 ### AC-5: Image Generation
+
 - [ ] Upload zone accepts drag & drop
 - [ ] Upload zone accepts click to browse
 - [ ] File validation displays appropriate messages
@@ -585,6 +640,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] All controls are keyboard accessible
 
 ### AC-6: Gallery
+
 - [ ] Gallery displays in responsive grid
 - [ ] Gallery shows mock generated images (at least 5)
 - [ ] Filters update UI when changed
@@ -598,6 +654,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Empty state displays when no images
 
 ### AC-7: Documentation
+
 - [ ] Documentation layout has sidebar navigation
 - [ ] Getting Started guide is complete
 - [ ] How to Use guide is complete
@@ -608,6 +665,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Page is mobile-responsive
 
 ### AC-8: FAQ
+
 - [ ] FAQ displays in accordion format
 - [ ] All 4 categories are present (General, Credits, Technical, Privacy)
 - [ ] Each category has at least 3 questions
@@ -616,6 +674,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Page is mobile-responsive
 
 ### AC-9: Legal
+
 - [ ] Terms of Service page is complete
 - [ ] All required sections are present
 - [ ] Last updated date is displayed
@@ -624,6 +683,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Page is mobile-responsive
 
 ### AC-10: Navigation & Footer
+
 - [ ] Header navigation is sticky on scroll
 - [ ] Logo links to homepage
 - [ ] All navigation links work correctly
@@ -633,6 +693,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Social media links are present (can be mock)
 
 ### AC-11: Accessibility
+
 - [ ] All interactive elements are keyboard accessible
 - [ ] Focus indicators are visible
 - [ ] Color contrast meets WCAG AA standards
@@ -643,6 +704,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Forms have proper labels
 
 ### AC-12: Responsiveness
+
 - [ ] All pages work on mobile (320px+)
 - [ ] All pages work on tablet (640px - 1024px)
 - [ ] All pages work on desktop (1024px+)
@@ -652,6 +714,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] Typography is readable at all sizes
 
 ### AC-13: Performance
+
 - [ ] Landing page loads in under 3 seconds
 - [ ] No layout shift during page load
 - [ ] Images use Next.js Image component
@@ -661,6 +724,7 @@ PlushifyMe is a SaaS application that allows users to upload images of themselve
 - [ ] JavaScript bundle is optimized
 
 ### AC-14: SEO
+
 - [ ] All pages have unique title tags
 - [ ] All pages have unique meta descriptions
 - [ ] Open Graph tags are present
@@ -699,6 +763,7 @@ These items will be addressed in Phase 2 (Backend Integration).
 ## Dependencies
 
 ### Technology Stack
+
 - Next.js 14+ (App Router)
 - React 18+
 - TypeScript 5+
@@ -707,6 +772,7 @@ These items will be addressed in Phase 2 (Backend Integration).
 - Radix UI primitives
 
 ### External Assets
+
 - Before/after example images (6-8 pairs)
 - Plushie style preview images
 - Icons (Lucide React or similar)
@@ -728,14 +794,14 @@ These items will be addressed in Phase 2 (Backend Integration).
 
 ## Risks & Mitigation
 
-| Risk | Impact | Likelihood | Mitigation |
-|------|--------|------------|------------|
-| Design changes mid-development | High | Medium | Establish design system early; get approval on mockups |
-| Component library limitations | Medium | Low | Evaluate shadcn/ui capabilities before starting |
-| Performance issues with animations | Medium | Low | Performance testing on real devices; optimize early |
-| Accessibility gaps | High | Medium | Regular accessibility audits; use semantic HTML |
-| Scope creep | High | Medium | Stick to UI-only implementation; defer backend work |
-| Responsive design complexity | Medium | Medium | Mobile-first approach; test frequently |
+| Risk                               | Impact | Likelihood | Mitigation                                             |
+| ---------------------------------- | ------ | ---------- | ------------------------------------------------------ |
+| Design changes mid-development     | High   | Medium     | Establish design system early; get approval on mockups |
+| Component library limitations      | Medium | Low        | Evaluate shadcn/ui capabilities before starting        |
+| Performance issues with animations | Medium | Low        | Performance testing on real devices; optimize early    |
+| Accessibility gaps                 | High   | Medium     | Regular accessibility audits; use semantic HTML        |
+| Scope creep                        | High   | Medium     | Stick to UI-only implementation; defer backend work    |
+| Responsive design complexity       | Medium | Medium     | Mobile-first approach; test frequently                 |
 
 ---
 
@@ -763,6 +829,6 @@ This requirements document should be reviewed and approved before implementation
 
 ## Version History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-11-16 | Development Team | Initial requirements document |
+| Version | Date       | Author           | Changes                       |
+| ------- | ---------- | ---------------- | ----------------------------- |
+| 1.0     | 2025-11-16 | Development Team | Initial requirements document |
