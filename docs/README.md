@@ -25,14 +25,19 @@ This directory contains comprehensive documentation for the PlushifyMe applicati
    - Common error patterns and systematic debugging approaches
    - **Use this for:** Any configuration issues, external service setup, debugging
 
-2. **[GENERATE_PLUSHIE_EXAMPLES.md](./GENERATE_PLUSHIE_EXAMPLES.md)** ⭐ **NEW**
-   - Complete guide to generating demo plushie images with DALL-E 3
-   - High-quality prompts for realistic transformations
-   - Step-by-step commands with cost estimates (~$1.28 total)
+2. **[PLUSHIE_GENERATION_V2.md](./PLUSHIE_GENERATION_V2.md)** ⭐ **LATEST**
+   - **v2 System:** GPT-4 Vision + DALL-E 3 two-step process
+   - Fixed issue where plushies were identical to originals
+   - Comprehensive prompt engineering for realistic transformations
+   - Step-by-step commands with cost estimates (~$1.44 total)
    - Troubleshooting and testing procedures
    - **Use this for:** Creating homepage demo images
 
-3. **[CONFIGURATION_VERIFICATION.md](./CONFIGURATION_VERIFICATION.md)**
+3. **[GENERATE_PLUSHIE_EXAMPLES.md](./GENERATE_PLUSHIE_EXAMPLES.md)** (v1 - superseded)
+   - Original guide (DALL-E only - did not work correctly)
+   - Kept for reference
+
+4. **[CONFIGURATION_VERIFICATION.md](./CONFIGURATION_VERIFICATION.md)**
    - Step-by-step verification of external services
    - Test scripts for OpenAI and AWS S3
    - CORS configuration instructions

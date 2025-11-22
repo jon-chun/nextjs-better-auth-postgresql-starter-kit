@@ -22,7 +22,12 @@
       "Bash(chmod:*)",
       "Bash(scripts/download-example-images.sh)",
       "Bash(npm run generate:plushies:dry-run:*)",
-      "Bash(scripts/create-placeholder-plushies.sh:*)"
+      "Bash(scripts/create-placeholder-plushies.sh:*)",
+      "Bash(npm run generate:plushies:test:*)",
+      "Bash(ls:*)",
+      "Bash(npm run generate:plushies:*)",
+      "Bash(tee:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

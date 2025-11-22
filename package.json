@@ -23,7 +23,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "generate:plushies": "tsx lib/generate-example-plushies.ts",
     "generate:plushies:dry-run": "tsx lib/generate-example-plushies.ts --dry-run",
-    "generate:plushies:text-only": "tsx lib/generate-example-plushies.ts --text-only"
+    "generate:plushies:test": "tsx lib/generate-example-plushies.ts --test --force"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.934.0",

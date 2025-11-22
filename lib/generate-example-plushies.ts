@@ -1,34 +1,39 @@
 /**
- * Generate Plushie Versions of Example Images using OpenAI DALL-E 3
+ * Generate Plushie Versions of Example Images using OpenAI GPT-4 Vision + DALL-E 3
  *
- * This script transforms realistic photos into adorable plushie versions
- * while maintaining the composition, subject, and key characteristics.
+ * This script uses a two-step process:
+ * 1. GPT-4 Vision analyzes the original photo to create a detailed description
+ * 2. DALL-E 3 generates a plushie version based on that description + plushie prompt
+ *
+ * This ensures the plushies are distinctly different from originals while maintaining
+ * subject characteristics.
  *
  * Usage:
- *   npx tsx lib/generate-example-plushies.ts [--category people|pets|kids|groups] [--dry-run]
+ *   npx tsx lib/generate-example-plushies.ts [--category people|pets|kids|groups] [--dry-run] [--force]
  *
  * Options:
  *   --category: Generate only for specific category (default: all)
  *   --dry-run: Show what would be generated without making API calls
  *   --force: Overwrite existing plushie images
+ *   --test: Generate only first image of each category for testing
  *
- * Cost: ~$0.04 per image (32 images = ~$1.28 total)
+ * Cost: ~$0.045 per image (GPT-4V ~$0.005 + DALL-E 3 $0.04)
  */
 
 import { config } from 'dotenv';
 import { OpenAI } from 'openai';
 import * as fs from 'fs';
 import * as path from 'path';
-import { createReadStream } from 'fs';
 
 // Load environment variables
 config();
 
 // Configuration
 const EXAMPLES_DIR = path.join(process.cwd(), 'public', 'images', 'examples');
+const PROMPT_FILE = path.join(EXAMPLES_DIR, 'prompt_real2plushie.txt');
 const CATEGORIES = ['people', 'pets', 'kids', 'groups'] as const;
 const IMAGES_PER_CATEGORY = 8;
-const COST_PER_IMAGE = 0.04; // DALL-E 3 standard 1024x1024
+const COST_PER_IMAGE = 0.045; // GPT-4V (~$0.005) + DALL-E 3 ($0.04)
 
 type Category = typeof CATEGORIES[number];
 
@@ -40,51 +45,67 @@ interface ImagePair {
   exists: boolean;
 }
 
-// High-quality prompts for each category
-const CATEGORY_PROMPTS: Record<Category, string> = {
-  people: `Transform this person into an adorable, high-quality plushie toy version.
-The plushie should:
-- Maintain the person's key features (hair style/color, clothing style, pose, expression)
-- Have a soft, cuddly appearance with visible fabric texture
-- Show realistic plushie details: stitching, button eyes or embroidered features, fabric folds
-- Use warm, friendly colors typical of premium stuffed toys
-- Preserve the original composition and background context
-- Look like a professionally crafted character plushie you'd find in a boutique toy store
-Style: Photorealistic plushie toy, studio photography quality, soft lighting`,
+/**
+ * Load the master plushie prompt template
+ */
+function loadPlushiePromptTemplate(): string {
+  try {
+    return fs.readFileSync(PROMPT_FILE, 'utf-8');
+  } catch (error) {
+    console.error(`❌ Error: Could not read prompt file: ${PROMPT_FILE}`);
+    process.exit(1);
+  }
+}
 
-  pets: `Transform this pet into an adorable, high-quality plushie toy version.
-The plushie should:
-- Maintain the pet's breed characteristics, coloring, and distinctive features
-- Have ultra-soft, fluffy fabric texture (appropriate for the animal type)
-- Show realistic plushie details: embroidered nose/eyes, visible stitching, fabric paws
-- Capture the pet's personality and pose from the original photo
-- Use natural fur colors rendered in plush fabric
-- Preserve the original composition and setting
-- Look like a premium, collectible stuffed animal
-Style: Photorealistic plushie toy, professional product photography, soft studio lighting`,
+/**
+ * Category-specific analysis instructions for GPT-4 Vision
+ */
+const CATEGORY_ANALYSIS_PROMPTS: Record<Category, string> = {
+  people: `Describe this person in detail for creating a plushie toy version. Include:
+- Gender presentation and approximate age
+- Hair style, color, and texture
+- Facial features (eye color, nose shape, mouth expression)
+- Clothing style, colors, and patterns
+- Body pose and positioning
+- Emotional expression
+- Background setting and environment
+- Any distinctive accessories or features
+Be specific about colors, positions, and characteristics.`,
 
-  kids: `Transform this child into an adorable, high-quality plushie toy version.
-The plushie should:
-- Maintain the child's key features (hair, clothing, expression, pose)
-- Have an extra cute, huggable appearance with soft fabric texture
-- Show whimsical plushie details: button or embroidered eyes, rosy cheeks, fabric clothing
-- Use bright, cheerful colors typical of children's plush toys
-- Preserve the original composition and background
-- Capture the innocent, joyful spirit of childhood in plushie form
-- Look like a premium character plushie from a high-end toy brand
-Style: Photorealistic plushie toy, kawaii aesthetic, professional studio photography, warm lighting`,
+  pets: `Describe this pet in detail for creating a plushie toy version. Include:
+- Animal type and breed (if identifiable)
+- Fur/feather color, patterns, and texture
+- Eye color and expression
+- Distinctive markings or features
+- Ear position and shape
+- Body pose and positioning
+- Size and body proportions
+- Background setting and environment
+- Any accessories (collar, tags, etc.)
+Be specific about colors, patterns, and physical characteristics.`,
 
-  groups: `Transform this group of people into adorable, high-quality plushie toy versions.
-The plushies should:
-- Maintain each person's distinctive features and relative positions
-- Show individual characteristics while maintaining visual harmony
-- Have soft, cuddly appearances with visible fabric textures
-- Display realistic plushie details: stitching, embroidered features, fabric clothing
-- Preserve the group dynamic and interactions from the original photo
-- Use coordinated colors that work well together as a set
-- Maintain the original composition and setting
-- Look like a premium collectible plushie set
-Style: Photorealistic plushie toys, professional product photography, studio quality, cohesive lighting`
+  kids: `Describe this child in detail for creating a plushie toy version. Include:
+- Approximate age
+- Hair style, color, and texture
+- Facial expression and emotion
+- Clothing style, colors, and patterns
+- Body pose and positioning
+- Any toys or accessories
+- Background setting and environment
+- Overall mood and character
+Be specific about colors, positions, and make it extra cute and whimsical.`,
+
+  groups: `Describe this group in detail for creating plushie toy versions. Include:
+For each person/subject:
+- Individual characteristics (age, hair, clothing)
+- Positioning relative to others
+- Facial expressions and interactions
+Overall scene:
+- Group dynamic and relationships
+- Background setting and environment
+- Color coordination
+- Spatial arrangement
+Be specific about how each subject relates to the others.`
 };
 
 /**
@@ -100,21 +121,25 @@ function initializeOpenAI(): OpenAI {
     process.exit(1);
   }
 
-  return new OpenAI({
-    apiKey,
-    organization: orgId,
-  });
+  const config: any = { apiKey };
+  if (orgId) {
+    config.organization = orgId;
+  }
+
+  return new OpenAI(config);
 }
 
 /**
  * Get all image pairs that need processing
  */
-function getImagePairs(category?: Category, force: boolean = false): ImagePair[] {
+function getImagePairs(category?: Category, force: boolean = false, testMode: boolean = false): ImagePair[] {
   const pairs: ImagePair[] = [];
   const categoriesToProcess = category ? [category] : CATEGORIES;
 
   for (const cat of categoriesToProcess) {
-    for (let i = 1; i <= IMAGES_PER_CATEGORY; i++) {
+    const limit = testMode ? 1 : IMAGES_PER_CATEGORY;
+
+    for (let i = 1; i <= limit; i++) {
       const originalPath = path.join(EXAMPLES_DIR, `${cat}_${i}_original.jpg`);
       const plushiePath = path.join(EXAMPLES_DIR, `${cat}_${i}_plushie.png`);
 
@@ -145,43 +170,101 @@ function getImagePairs(category?: Category, force: boolean = false): ImagePair[]
 }
 
 /**
- * Generate plushie version using DALL-E 3 image editing
+ * Step 1: Analyze original image with GPT-4 Vision
  */
-async function generatePlushie(
+async function analyzeOriginalImage(
   openai: OpenAI,
   pair: ImagePair,
   dryRun: boolean
-): Promise<boolean> {
-  const { category, number, originalPath, plushiePath } = pair;
-  const filename = `${category}_${number}`;
+): Promise<string | null> {
+  const { category, originalPath } = pair;
 
-  console.log(`\n🎨 Processing: ${filename}`);
-  console.log(`   Original: ${path.basename(originalPath)}`);
-  console.log(`   Output:   ${path.basename(plushiePath)}`);
+  console.log(`   🔍 Step 1: Analyzing original image with GPT-4 Vision...`);
 
   if (dryRun) {
-    console.log(`   [DRY RUN] Would generate plushie using DALL-E 3`);
-    console.log(`   Prompt: ${CATEGORY_PROMPTS[category].substring(0, 100)}...`);
+    console.log(`   [DRY RUN] Would analyze image with GPT-4 Vision`);
+    return `[Detailed ${category} description would be generated here]`;
+  }
+
+  try {
+    // Read and encode image
+    const imageBuffer = fs.readFileSync(originalPath);
+    const imageBase64 = imageBuffer.toString('base64');
+    const imageDataUrl = `data:image/jpeg;base64,${imageBase64}`;
+
+    // Analyze with GPT-4 Vision
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: CATEGORY_ANALYSIS_PROMPTS[category],
+            },
+            {
+              type: 'image_url',
+              image_url: {
+                url: imageDataUrl,
+                detail: 'high',
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 500,
+    });
+
+    const description = response.choices[0]?.message?.content;
+
+    if (!description) {
+      throw new Error('No description generated by GPT-4 Vision');
+    }
+
+    console.log(`   ✅ Analysis complete (${description.length} chars)`);
+
+    return description;
+  } catch (error: any) {
+    console.error(`   ❌ Error analyzing image:`, error.message);
+    return null;
+  }
+}
+
+/**
+ * Step 2: Generate plushie with DALL-E 3 using description
+ */
+async function generatePlushieFromDescription(
+  openai: OpenAI,
+  pair: ImagePair,
+  description: string,
+  promptTemplate: string,
+  dryRun: boolean
+): Promise<boolean> {
+  const { plushiePath } = pair;
+
+  console.log(`   🎨 Step 2: Generating plushie with DALL-E 3...`);
+
+  if (dryRun) {
+    console.log(`   [DRY RUN] Would generate plushie with DALL-E 3`);
+    console.log(`   Description: ${description.substring(0, 100)}...`);
     return true;
   }
 
   try {
-    // Read the original image
-    const imageBuffer = fs.readFileSync(originalPath);
-    const imageBase64 = imageBuffer.toString('base64');
-    const imageMimeType = 'image/jpeg';
-    const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
+    // Truncate description if needed to fit DALL-E's 4000 char limit
+    // Template is ~2078 chars, so limit description to 1800 chars for safety
+    const truncatedDescription = description.length > 1800
+      ? description.substring(0, 1800) + '...'
+      : description;
 
-    console.log(`   📤 Uploading to OpenAI...`);
+    // Combine description with plushie prompt template
+    const fullPrompt = promptTemplate.replace('[SUBJECT_DESCRIPTION]', truncatedDescription);
 
-    // Use DALL-E 3 with image prompting (using the image as reference)
-    // Note: DALL-E 3 doesn't support direct image editing, but we can use
-    // image understanding + generation with a detailed prompt
+    // Generate with DALL-E 3
     const response = await openai.images.generate({
       model: 'dall-e-3',
-      prompt: `${CATEGORY_PROMPTS[category]}
-
-IMPORTANT: Base this plushie transformation on the uploaded reference image. Match the composition, pose, colors, and subject characteristics as closely as possible while converting to plushie style.`,
+      prompt: fullPrompt,
       n: 1,
       size: '1024x1024',
       quality: 'standard',
@@ -189,11 +272,8 @@ IMPORTANT: Base this plushie transformation on the uploaded reference image. Mat
     });
 
     if (!response.data[0]?.b64_json) {
-      throw new Error('No image data received from OpenAI');
+      throw new Error('No image data received from DALL-E 3');
     }
-
-    console.log(`   ✅ Generated successfully`);
-    console.log(`   💾 Saving to ${path.basename(plushiePath)}...`);
 
     // Save the generated image
     const imageData = Buffer.from(response.data[0].b64_json, 'base64');
@@ -203,23 +283,21 @@ IMPORTANT: Base this plushie transformation on the uploaded reference image. Mat
     const stats = fs.statSync(plushiePath);
     const sizeKB = (stats.size / 1024).toFixed(1);
 
-    console.log(`   ✅ Saved successfully (${sizeKB} KB)`);
+    console.log(`   ✅ Plushie generated and saved (${sizeKB} KB)`);
 
     // Show revised prompt if available
     if (response.data[0].revised_prompt) {
-      console.log(`   📝 DALL-E revised prompt: ${response.data[0].revised_prompt.substring(0, 100)}...`);
+      console.log(`   📝 DALL-E revised: ${response.data[0].revised_prompt.substring(0, 150)}...`);
     }
 
     return true;
   } catch (error: any) {
-    console.error(`   ❌ Error generating ${filename}:`, error.message);
+    console.error(`   ❌ Error generating plushie:`, error.message);
 
     if (error.status === 400) {
-      console.error('   💡 Tip: The image might violate content policy. Try a different image.');
+      console.error('   💡 Tip: Content policy violation. Description might need adjustment.');
     } else if (error.status === 429) {
       console.error('   💡 Tip: Rate limit exceeded. Wait a moment and try again.');
-    } else if (error.status === 401) {
-      console.error('   💡 Tip: Check your OPENAI_API_KEY is valid.');
     }
 
     return false;
@@ -227,61 +305,43 @@ IMPORTANT: Base this plushie transformation on the uploaded reference image. Mat
 }
 
 /**
- * Generate using alternative approach: DALL-E 3 without image input
- * (Fallback if image-based generation isn't working)
+ * Generate plushie using two-step process
  */
-async function generatePlushieTextOnly(
+async function generatePlushie(
   openai: OpenAI,
   pair: ImagePair,
+  promptTemplate: string,
   dryRun: boolean
 ): Promise<boolean> {
-  const { category, number, plushiePath } = pair;
+  const { category, number } = pair;
   const filename = `${category}_${number}`;
 
-  console.log(`\n🎨 Processing (text-only mode): ${filename}`);
+  console.log(`\n🎨 Processing: ${filename}`);
+  console.log(`   Original: ${path.basename(pair.originalPath)}`);
+  console.log(`   Output:   ${path.basename(pair.plushiePath)}`);
 
-  if (dryRun) {
-    console.log(`   [DRY RUN] Would generate plushie using text-only DALL-E 3`);
-    return true;
-  }
+  // Step 1: Analyze original with GPT-4 Vision
+  const description = await analyzeOriginalImage(openai, pair, dryRun);
 
-  try {
-    // Enhanced prompt for text-only generation
-    const enhancedPrompt = `Create a photorealistic image of ${CATEGORY_PROMPTS[category]}
-
-This should look like professional product photography of an actual high-quality plushie toy, not a cartoon or illustration. The plushie should have realistic fabric texture, visible stitching, and look tangible and three-dimensional.`;
-
-    console.log(`   📤 Generating with DALL-E 3 (text-only)...`);
-
-    const response = await openai.images.generate({
-      model: 'dall-e-3',
-      prompt: enhancedPrompt,
-      n: 1,
-      size: '1024x1024',
-      quality: 'standard',
-      response_format: 'b64_json',
-    });
-
-    if (!response.data[0]?.b64_json) {
-      throw new Error('No image data received from OpenAI');
-    }
-
-    console.log(`   ✅ Generated successfully`);
-
-    // Save the generated image
-    const imageData = Buffer.from(response.data[0].b64_json, 'base64');
-    fs.writeFileSync(plushiePath, imageData);
-
-    const stats = fs.statSync(plushiePath);
-    const sizeKB = (stats.size / 1024).toFixed(1);
-
-    console.log(`   ✅ Saved successfully (${sizeKB} KB)`);
-
-    return true;
-  } catch (error: any) {
-    console.error(`   ❌ Error: ${error.message}`);
+  if (!description) {
+    console.error(`   ❌ Failed to analyze image, skipping`);
     return false;
   }
+
+  // Step 2: Generate plushie with DALL-E 3
+  const success = await generatePlushieFromDescription(
+    openai,
+    pair,
+    description,
+    promptTemplate,
+    dryRun
+  );
+
+  if (success) {
+    console.log(`   ✅ Complete: ${filename}`);
+  }
+
+  return success;
 }
 
 /**
@@ -289,8 +349,8 @@ This should look like professional product photography of an actual high-quality
  */
 async function main() {
   console.log('==================================================');
-  console.log('  PlushifyMe - Example Plushie Generator');
-  console.log('  Powered by OpenAI DALL-E 3');
+  console.log('  PlushifyMe - Example Plushie Generator v2');
+  console.log('  GPT-4 Vision + DALL-E 3');
   console.log('==================================================\n');
 
   // Parse command line arguments
@@ -298,7 +358,7 @@ async function main() {
   const categoryArg = args.find(arg => arg.startsWith('--category='))?.split('=')[1] as Category | undefined;
   const dryRun = args.includes('--dry-run');
   const force = args.includes('--force');
-  const textOnly = args.includes('--text-only');
+  const testMode = args.includes('--test');
 
   // Validate category
   if (categoryArg && !CATEGORIES.includes(categoryArg)) {
@@ -307,11 +367,15 @@ async function main() {
     process.exit(1);
   }
 
+  // Load plushie prompt template
+  const promptTemplate = loadPlushiePromptTemplate();
+  console.log(`✅ Loaded plushie prompt template (${promptTemplate.length} chars)\n`);
+
   // Initialize OpenAI
   const openai = initializeOpenAI();
 
   // Get images to process
-  const pairs = getImagePairs(categoryArg, force);
+  const pairs = getImagePairs(categoryArg, force, testMode);
 
   if (pairs.length === 0) {
     console.log('✅ No images to process. All plushies already exist!');
@@ -325,7 +389,8 @@ async function main() {
   console.log(`📊 Generation Summary:`);
   console.log(`   Images to process: ${pairs.length}`);
   console.log(`   Estimated cost: $${totalCost.toFixed(2)} (${pairs.length} × $${COST_PER_IMAGE})`);
-  console.log(`   Mode: ${dryRun ? 'DRY RUN' : textOnly ? 'TEXT-ONLY' : 'IMAGE-BASED'}`);
+  console.log(`   Mode: ${dryRun ? 'DRY RUN' : testMode ? 'TEST (1 per category)' : 'FULL GENERATION'}`);
+  console.log(`   Method: GPT-4 Vision analysis → DALL-E 3 generation`);
   console.log('');
 
   if (dryRun) {
@@ -344,9 +409,7 @@ async function main() {
     const pair = pairs[i];
     console.log(`\n[${i + 1}/${pairs.length}]`);
 
-    const success = textOnly
-      ? await generatePlushieTextOnly(openai, pair, dryRun)
-      : await generatePlushie(openai, pair, dryRun);
+    const success = await generatePlushie(openai, pair, promptTemplate, dryRun);
 
     if (success) {
       successCount++;
@@ -354,10 +417,10 @@ async function main() {
       failCount++;
     }
 
-    // Rate limiting: wait 1 second between requests
+    // Rate limiting: wait 2 seconds between requests
     if (i < pairs.length - 1 && !dryRun) {
-      console.log('   ⏳ Waiting 1 second (rate limiting)...');
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('   ⏳ Waiting 2 seconds (rate limiting)...');
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
 
@@ -370,14 +433,27 @@ async function main() {
     console.log(`❌ Failed: ${failCount}`);
   }
   if (!dryRun) {
-    console.log(`💰 Estimated cost: $${(successCount * COST_PER_IMAGE).toFixed(2)}`);
+    console.log(`💰 Actual cost: $${(successCount * COST_PER_IMAGE).toFixed(2)}`);
   }
   console.log('');
-  console.log('Next steps:');
-  console.log('1. Review generated images: ls -lh public/images/examples/*_plushie.png');
-  console.log('2. Update your application to use local images');
-  console.log('3. Test the homepage: npm run dev');
-  console.log('');
+
+  if (testMode && successCount > 0) {
+    console.log('🧪 TEST MODE COMPLETE');
+    console.log('');
+    console.log('Next steps:');
+    console.log('1. Review test images to verify they look different from originals');
+    console.log('2. Check plushie quality and transformation accuracy');
+    console.log('3. If satisfied, run full generation:');
+    console.log('   npm run generate:plushies -- --force');
+    console.log('');
+  } else if (successCount > 0) {
+    console.log('Next steps:');
+    console.log('1. Review generated images: open public/images/examples/');
+    console.log('2. Compare originals vs plushies to verify difference');
+    console.log('3. Test the homepage: npm run dev');
+    console.log('4. Visit: http://localhost:3000/#examples');
+    console.log('');
+  }
 
   process.exit(failCount > 0 ? 1 : 0);
 }
@@ -387,4 +463,4 @@ if (require.main === module) {
   main().catch(console.error);
 }
 
-export { generatePlushie, getImagePairs, CATEGORY_PROMPTS };
+export { generatePlushie, getImagePairs };

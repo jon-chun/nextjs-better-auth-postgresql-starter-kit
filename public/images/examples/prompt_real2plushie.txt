@@ -1,1 +1,40 @@
-Transform a realistic photo of [insert detailed description of the subject(s), such as kids, pets, people, or groups, including their poses, expressions, clothing, and setting] into an image where only the main subject(s) are converted into cute, high-quality stuffed toy plushie versions: use soft, textured fabric materials like fleece or velour in natural colors matching the originals; add embroidered or button eyes, stitched mouths, and fuzzy details for fur/hair; retain exact poses, facial expressions, and interactions from the photo; keep the original background and any non-subject elements unchanged; render in photorealistic style with soft lighting and high detail for a whimsical yet lifelike effect; no additional elements or alterations.
+A professional product photograph of a high-quality handcrafted plushie toy based on this description: [SUBJECT_DESCRIPTION]
+
+PLUSHIE CHARACTERISTICS:
+- Made of premium soft fabric (fleece, velour, or minky) with visible texture and subtle fabric grain
+- Large expressive button eyes or carefully embroidered eyes with shine highlights
+- Embroidered nose, mouth, and facial features with visible thread texture
+- Rounded, simplified features maintaining the subject's key characteristics
+- Visible topstitching along seams (1-2mm from edges) in matching thread
+- Slightly oversized head proportions (1.3x normal) for enhanced cuteness
+- Soft stuffed appearance with gentle fabric wrinkles and natural plush curves
+- Matte fabric surface with soft light diffusion (not glossy or shiny)
+
+COLOR TREATMENT:
+- Slightly more saturated and warmer colors than realistic photos
+- Fabric rendering with subtle color variation and texture
+- Natural shading from fabric folds and stuffing shape
+- Pastel or softened tones while maintaining subject's original color scheme
+
+POSE & COMPOSITION:
+- Exact same pose, positioning, and angle as original subject
+- Same background setting and environmental context
+- Plushie appears to be sitting/standing in the real environment
+- Natural shadows and lighting matching the original scene
+
+TECHNICAL EXECUTION:
+- Studio-quality product photography aesthetic
+- Shallow depth of field with subject in sharp focus
+- Soft, diffused lighting from 45-degree angle
+- Clean, professional presentation
+- Photorealistic fabric rendering (NOT cartoon, illustration, or 3D render)
+- The plushie should look like a real, tangible stuffed toy that exists in 3D space
+
+AVOID:
+- Cartoon or illustrated style
+- Flat 2D rendering
+- Overly smooth or plastic-looking surfaces
+- Perfect symmetry (plushies have charming imperfections)
+- Artificial or digital-looking elements
+
+The final image should look like a professional photograph of an actual premium plushie toy that was handcrafted by a skilled artisan, photographed in the same setting as the original subject.
